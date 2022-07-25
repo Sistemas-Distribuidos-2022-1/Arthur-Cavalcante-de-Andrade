@@ -4,32 +4,27 @@ import threading
 import io
 
 def handle_client(connectionSocket, addr):
-    while True:
-        quest = int(connectionSocket.recv(1024).decode())
-        db = (io.open("dados.txt", "r")).read()
-        search = db[db.find('Q' + str(quest)) + 3:db.find('Q' + str(quest+1))].upper().replace('\n', ',').split(',')
-        print(search)
-        param = connectionSocket.recv(1024).decode()
+    quest = int(connectionSocket.recv(1024).decode())
+    db = (io.open("dados.txt", "r")).read()
+    search = db[db.find('Q' + str(quest)) + 3:db.find('Q' + str(quest+1))].upper().replace('\n', ',').split(',')
+    print(search)
+    param = connectionSocket.recv(1024).decode()
 
-        if param in search:
-            if quest in [5,8]:
-                connectionSocket.send(search[search.index(param) + 1].encode())
-                exit()
-            elif quest in [1,2,4,7,9]:
-                connectionSocket.send(search[search.index(param) + 1].encode())
-                sleep(0.1)
-                connectionSocket.send(search[search.index(param) + 2].encode())
-                exit()
-            elif quest in [3,6]:
-                connectionSocket.send(search[search.index(param) + 1].encode())
-                sleep(0.1)
-                connectionSocket.send(search[search.index(param) + 2].encode())
-                sleep(0.1)
-                connectionSocket.send(search[search.index(param) + 3].encode())
-                exit()
-        else:
-            connectionSocket.send('NONE'.encode())
-            exit()
+    if param in search:
+        if quest in [5,8]:
+            connectionSocket.send(search[search.index(param) + 1].encode())
+        elif quest in [1,2,4,7,9]:
+            connectionSocket.send(search[search.index(param) + 1].encode())
+            sleep(0.1)
+            connectionSocket.send(search[search.index(param) + 2].encode())
+        elif quest in [3,6]:
+            connectionSocket.send(search[search.index(param) + 1].encode())
+            sleep(0.1)
+            connectionSocket.send(search[search.index(param) + 2].encode())
+            sleep(0.1)
+            connectionSocket.send(search[search.index(param) + 3].encode())
+    else:
+        connectionSocket.send('NONE'.encode())
 
 
 if __name__ == '__main__':
