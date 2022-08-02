@@ -25,8 +25,8 @@ while True:
 
 buffer = []
 full = threading.Semaphore(limit)
-empty = threading.BoundedSemaphore(limit)
-for i in range(10):
+empty = threading.Semaphore(limit)
+for i in range(limit):
     empty.acquire()
 
 server = rpyc.ThreadedServer(BufferService, port=12345)
