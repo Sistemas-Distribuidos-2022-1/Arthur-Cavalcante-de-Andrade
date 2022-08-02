@@ -6,7 +6,7 @@ class BufferService(rpyc.Service):
         producer.acquire()
         buffer.append(id)
         if consumer.locked(): consumer.release()
-        if len(buffer) < 10: producer.release()
+        if len(buffer) < limit: producer.release()
         print("Produced {}, buffer length = {}".format(id, len(buffer)))
 
     def exposed_consume(self):
